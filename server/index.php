@@ -5,9 +5,9 @@ require './vendor/autoload.php';
 
 // Load slim framework
 $app = new \Slim\Slim();
-$app->response()->header('Content-Type', 'application/json');
-$app->response()->header('Access-Control-Allow-Origin', '*');
-$app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+/* $app->response()->header('Content-Type', 'application/html'); */
+/* $app->response()->header('Access-Control-Allow-Origin', '*'); */
+/* $app->response()->header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE'); */
 
 // SETUP ENVIRONMENT
 define('ENVIRONMENT', 'development');
@@ -42,6 +42,10 @@ if (defined('ENVIRONMENT'))
 
 // Config database
 require './config/database.php';
+
+// Config Security with HTTP Basic Authentication
+require './security/HttpBasicAuth.php';
+$app->add(new HttpBasicAuth());
 
 // Load routers
 require 'routes.php';

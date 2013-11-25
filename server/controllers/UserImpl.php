@@ -49,12 +49,12 @@ class UserImpl {
         $input = $this->app->request()->post();
         try 
         {
-            if($input['name'] && $input['password']) 
-            {
-                User::updateUser($input);
-                response_json_data('update user successfully');
-            }
-            else throw new Exception ('empty name or password');
+            //if is empty name or password terminate update
+            if(!$input['name'] || !$input['password']) 
+                throw new Exception ('empty name or password');
+
+            User::updateUser($input);
+            response_json_data('update user successfully');
         }
         catch(Exception $e) 
         {

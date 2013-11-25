@@ -10,12 +10,12 @@ $app->get('/', function(){
     ));
 });
 
-/*---------------------------------------------*/
-/*--------------- USER CRUD METHODS -----------*/
-/*---------------------------------------------*/
+/*--------------------------------*/
+/*--------- USER ROUTES ----------*/
+/*--------------------------------*/
 $user_controller = new UserImpl;
 // find all users
-$app->get('/users', function() use ($user_controller) {
+$app->get('/users',function() use ($user_controller) {
     $user_controller->findAll();
 });
 //find an user by name

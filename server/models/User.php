@@ -3,8 +3,8 @@
 use RedBean_Facade as R;
 
 //speed up the process of recursive query like exportAll and dup
-$schema = R::$duplicationManager->getSchema();
-R::$duplicationManager->setTables($schema);
+/* $schema = R::$duplicationManager->getSchema(); */
+/* R::$duplicationManager->setTables($schema); */
 
 /**
  * this class manages bsaic CRUD method of the users
@@ -12,6 +12,7 @@ R::$duplicationManager->setTables($schema);
 Class User {
     private $name;
     private $password;
+    private $role;
 
 
     /* returns all users */
@@ -37,7 +38,8 @@ Class User {
     /* update an user */
     public static function updateUser($input) {
         R::begin();
-        try{
+        try
+        {
             $user = R::findOne('users','id = ?', array($input['id']));
             $user->name = $input['name'];
             $user->password = $input['password'];
@@ -47,6 +49,14 @@ Class User {
         catch(Exception $e) {
             R::rollback();
         }
+    }
+
+    public static function validateLogin($name, $password)
+    {
+        $user = R::findOne('users','name = ?', array($name));
+        if(!$user) return false;
+        if(strcmp($user->password, $password) == 0) return true;
+        return false;
     }
 
 }
