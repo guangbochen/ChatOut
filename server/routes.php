@@ -26,5 +26,12 @@ $app->get('/user/:name', function($name) use ($user_controller) {
 $app->post('/user', function() use ($user_controller) {
     $user_controller->updateUser();
 });
-
+//create an user
+$app->post('/add/user', function() use ($user_controller) {
+    $user_controller->createUser();
+});
+//delete an user
+$app->post('/delete/user', function() use ($user_controller) {
+    $user_controller->deleteUser();
+});
 

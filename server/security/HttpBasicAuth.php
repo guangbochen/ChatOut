@@ -1,4 +1,8 @@
 <?php
+/**
+ * HTTP Basic Authentication
+ * to require HTTP basic auth for all routes.
+ */
 require_once 'models/User.php';
 class HttpBasicAuth extends \Slim\Middleware 
 {
@@ -14,36 +18,6 @@ class HttpBasicAuth extends \Slim\Middleware
     public function __construct( $realm = 'Requires Login') 
     {
         $this->realm = $realm;
-    }
-
-    /**
-     * Deny Access
-     */   
-    public function deny_access() 
-    {
-        $res = $this->app->response();
-        $res->status(401);
-        $res->header('WWW-Authenticate', sprintf('Basic realm="%s"', $this->realm));
-    }
-
-    /**
-     * Authenticate 
-     * @param string $username, The HTTP Authentication username
-     * @param string $password, The HTTP Authentication password     
-     */
-    public function authenticate($username, $password) 
-    {
-        if(!ctype_alnum($username)) 
-            return false;
-
-        if(isset($username) && isset($password))
-        {
-            // Check database here with $username and $password
-            if(User::validateLogin($username, $password))
-                return true;
-        }
-        else 
-            return false;
     }
  
     /**
@@ -66,4 +40,35 @@ class HttpBasicAuth extends \Slim\Middleware
             $this->deny_access();
         }
     }
+
+    /**
+     * Authenticate 
+     * @param string $username, The HTTP Authentication username
+     * @param string $password, The HTTP Authentication password     
+     */
+    protected function authenticate($username, $password) 
+    {
+        if(!ctype_alnum($username)) 
+            return false;
+
+        if(isset($username) && isset($password))
+        {
+            // Check database here with $username and $password
+            if(User::validateLogin($username, $password))
+                return true;
+        }
+        else 
+            return false;
+    }
+
+    /**
+     * Deny Access
+     */   
+    protected function deny_access() 
+    {
+        $res = $this->app->response();
+        $res->status(401);
+        $res->header('WWW-Authenticate', sprintf('Basic realm="%s"', $this->realm));
+    }
+
 }
